@@ -6,6 +6,9 @@ from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from random import randint
+from django.contrib.auth import authenticate
+
+
 
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
@@ -89,11 +92,12 @@ def sign_in(request):
         password = data["password"]
     except:
         return Response({"message":"password is required"},status=status.HTTP_400_BAD_REQUEST)
-    try:
-        user = User.objects.get(email=email)
-    except:
-        return Response({"message":"not found"},status=status.HTTP_404_NOT_FOUND)
-    if user.password == password:
+   
+    user = User.objects.get(email=email)
+    if user is None:
+            return Response({"message": "No User exist"},status=status.HTTP_404_NOT_FOUND)
+
+    if user.check_password(password):
         try:
             Token.objects.get(user=user).delete()
         except:
@@ -101,9 +105,12 @@ def sign_in(request):
         token = Token.objects.create(user=user)
         user.is_active=True
         user.save()
-        return Response({"message":"success","token":token},status=status.HTTP_200_OK)
+        return Response({"message":"success","token":str(token)},status=status.HTTP_200_OK)
+
     else :
         return Response({"message":"wrong password"},status=status.HTTP_403_FORBIDDEN)
+            
+    
 
 
 

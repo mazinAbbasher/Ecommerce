@@ -1,11 +1,17 @@
 from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 from .models import User,Order,OrderDetail,Product,Category
 
 
 class UserSerializer(ModelSerializer):
+    password = serializers.CharField(write_only=True)
     class Meta:
         model = User
-        fields = [ 'email', 'username', 'is_staff', 'is_active',"otp"] 
+        fields = [ 'email', 'username','password', 'is_staff', 'is_active',"otp"] 
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        user = User.objects.create_user(password=password, **validated_data)
+        return user
 
 
 
