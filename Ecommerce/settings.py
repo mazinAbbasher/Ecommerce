@@ -47,6 +47,9 @@ INSTALLED_APPS = [
 
     'EcoWeb',
 
+
+    'anymail',
+
 ]
 
 MIDDLEWARE = [
@@ -144,3 +147,15 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
 }
+
+
+
+
+EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
+ANYMAIL = {
+    'MAILGUN_API_KEY': '0bbfbd82f7b0f60a8cd9dde41cc53fd4-1900dca6-181fc1b8',
+    'MAILGUN_SENDER_DOMAIN': 'sandbox0e396e38238e449fba3ab2b2ee9fec1e.mailgun.org',
+}
+
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"

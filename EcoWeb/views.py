@@ -1,13 +1,12 @@
 from rest_framework.decorators import api_view
 from rest_framework.viewsets import  ModelViewSet
+from EcoWeb.tasks import send_otp_email
 from .models import User,Order,OrderDetail,Product,Category
 from .serializers import OrderListSerializer, UserSerializer,OrderSerializer,OrderDetailSerializer,ProductSerializer,CategorySerializer
 from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from random import randint
-from django.contrib.auth import authenticate
-
 
 
 class UserViewSet(ModelViewSet):
@@ -38,6 +37,7 @@ class UserViewSet(ModelViewSet):
         serializer = self.get_serializer(data=mydata)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        send_otp_email.delay(email, otp)
         return Response({"message":"succes"}, status=status.HTTP_201_CREATED)
 
 
@@ -48,10 +48,11 @@ class UserViewSet(ModelViewSet):
             permission_classes= [permissions.IsAdminUser()]
         return permission_classes
 
+
 @api_view(["POST"])
 def verify_otp(request):
     try :
-        otp = request.data['otp']
+        otp = int(request.data['otp'])
     except:
         return Response({"message":"otp is required"},status=status.HTTP_400_BAD_REQUEST)
     try :
@@ -77,9 +78,6 @@ def verify_otp(request):
 
         return Response({"message":"success","token":str(token)},status=status.HTTP_200_OK)
 
-
-
-        
 
 @api_view(["POST"])
 def sign_in(request):
@@ -109,9 +107,6 @@ def sign_in(request):
 
     else :
         return Response({"message":"wrong password"},status=status.HTTP_403_FORBIDDEN)
-            
-    
-
 
 
 @api_view(["POST"])
@@ -120,17 +115,7 @@ def log_out(request):
     user.is_active = False
     user.save()
     return Response({"message":"success"},status=status.HTTP_200_OK)
-
-
-
-
-        
-
-
-
-
-
-
+ 
 
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
@@ -142,8 +127,6 @@ class ProductViewSet(ModelViewSet):
         else:
             permission_classes= [permissions.IsAdminUser()]
         return permission_classes
-
-
 
 
 class CategoryViewSet(ModelViewSet):
@@ -165,14 +148,10 @@ class CategoryViewSet(ModelViewSet):
         return permission_classes
 
 
-
-
-
 class OrderViewSet(ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     
-
 
     def create(self,request):
         total = 0
@@ -204,22 +183,18 @@ class OrderViewSet(ModelViewSet):
         order.total = total
         order.save()
         return Response({"message":"success"},status=status.HTTP_201_CREATED)
-
-        
-
-
+     
     
     def retrieve(self,request,*args, **kwargs):
         instance = self.get_object()
         if instance.user != request.user :
-            return Response({"message":"Unauthorized"},status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"message":"permission denied"},status=status.HTTP_401_UNAUTHORIZED)
         order = OrderSerializer(instance)
         details = OrderDetail.objects.filter(order=instance)
         serializer = OrderDetailSerializer(details,many = True)
         return Response({"message":"success","order":order.data,"details":serializer.data},status=status.HTTP_200_OK)
         
-
-    
+ 
     def list(self,request,*args, **kwargs):
         if request.user.is_staff:
             queryset = Order.objects.all()
@@ -229,19 +204,14 @@ class OrderViewSet(ModelViewSet):
         return Response({"message":"success","data":orders.data},status=status.HTTP_200_OK)
         
 
-
     def destroy(self,request,*args, **kwargs):
         instance = self.get_object()
         if instance.user == request.user or instance.user.is_staff:
             instance.is_deleted = True
             instance.save()
             return Response({"message":"success"},status=status.HTTP_200_OK)
-
         else:
             return Response({"message":"Unauthorized"},status=status.HTTP_401_UNAUTHORIZED)
-
-
-
 
 
     def get_permissions(self):
