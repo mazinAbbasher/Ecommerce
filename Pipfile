@@ -12,6 +12,7 @@ django-anymail = "*"
 redis = "*"
 django-redis = "*"
 elasticsearch = "*"
+django-elasticsearch-dsl = "*"
 
 [dev-packages]
 

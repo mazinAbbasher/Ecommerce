@@ -50,6 +50,9 @@ INSTALLED_APPS = [
 
     'anymail',
 
+    'django_elasticsearch_dsl',
+
+
 ]
 
 MIDDLEWARE = [
@@ -178,4 +181,10 @@ CACHES = {
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,  # Set the number of items per page to 10
+}
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'http://localhost:9200',
+    },
 }
