@@ -7,6 +7,8 @@ from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from random import randint
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 
 class UserViewSet(ModelViewSet):
@@ -121,6 +123,18 @@ class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
+    @method_decorator(cache_page(60 * 15))
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
     def get_permissions(self):
         if self.action in ["list",'retrieve']:
             permission_classes= [permissions.AllowAny()]
@@ -133,9 +147,22 @@ class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+    @method_decorator(cache_page(60 * 15))
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        print (instance)
+        # print (instance)
         products = Product.objects.filter(category=instance)
         serializer = ProductSerializer(products,many=True)
         return Response(serializer.data)

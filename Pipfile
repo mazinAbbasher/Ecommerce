@@ -10,6 +10,7 @@ mysqlclient = "==2.1.1"
 celery = "*"
 django-anymail = "*"
 redis = "*"
+django-redis = "*"
 
 [dev-packages]
 
