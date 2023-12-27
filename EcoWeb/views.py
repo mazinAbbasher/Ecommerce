@@ -125,7 +125,7 @@ class ProductViewSet(ModelViewSet):
 
     @method_decorator(cache_page(60 * 15))
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
+        queryset = Product.objects.all().order_by("sequence")
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -147,9 +147,9 @@ class CategoryViewSet(ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-    @method_decorator(cache_page(60 * 15))
+    @method_decorator(cache_page(60 * 1))
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
+        queryset = Category.objects.all().order_by("sequence")
 
         page = self.paginate_queryset(queryset)
         if page is not None:

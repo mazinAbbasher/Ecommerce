@@ -23,6 +23,7 @@ class Category(models.Model):
     name = models.CharField(max_length=30)
     description = models.CharField(max_length=200)
     is_available = models.BooleanField(default=True)
+    sequence = models.IntegerField(default=100)
 
     def __str__(self):
         return str(self.name)
@@ -37,6 +38,7 @@ class Product(models.Model):
     unit = models.CharField(max_length=20)
     description = models.CharField(max_length=200)
     is_available = models.BooleanField(default=True)
+    sequence = models.IntegerField(default=100)
 
     def __str__(self):
         return str(self.name)

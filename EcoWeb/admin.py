@@ -7,10 +7,10 @@ class UserAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display=['id','name','description','is_available']
+    list_display=['id','name','description','is_available','sequence']
     
 class productAdmin(admin.ModelAdmin):
-    list_display=['id','name','price','unit','description','is_available']
+    list_display=['id','name','price','unit','description','is_available','sequence']
     
 class OrderAdmin(admin.ModelAdmin):
     list_display=['id','user','total','date','status']
