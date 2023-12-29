@@ -1,6 +1,6 @@
-django = 4.2.1
-djangorestframework = 3.14.0
-mysqlclient = 2.1.1
+django = "4.2.1"
+djangorestframework = "3.14.0"
+mysqlclient = "2.1.1"
 celery = "*"
 django-anymail = "*"
 redis = "*"
