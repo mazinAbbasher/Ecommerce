@@ -1,0 +1,10 @@
+.venv
+.venv-linux
+EcoWeb/__pycache__
+EcoWeb/migrations/__pycache__
+Ecommerce/.env
+.vscode/
+Pipfile
+Pipfile.lock
+static
+__pycache__

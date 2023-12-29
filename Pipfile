@@ -13,6 +13,7 @@ redis = "*"
 django-redis = "*"
 elasticsearch = "*"
 django-elasticsearch-dsl = "*"
+django-environ = "*"
 
 [dev-packages]
 
