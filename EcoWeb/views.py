@@ -9,15 +9,11 @@ from rest_framework.authtoken.models import Token
 from random import randint
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
-
-# from .documents import ProductDocument
 from django_elasticsearch_dsl.search import Search
 
 @api_view(["GET"])
 def search_products(request,query):
     s = Search(index='products').query('multi_match', query=query, fields=['name', 'description'])
-
-    # s = ProductDocument.search().query("match", description="abc")
     response = s.execute()
     return response
 
