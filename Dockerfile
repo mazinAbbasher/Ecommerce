@@ -20,4 +20,4 @@ EXPOSE 3306
 RUN python manage.py collectstatic
 
 # Start the Django development server
-CMD ["python","manage.py","migrate","gunicorn", "--config", "gunicorn_config.py", "Ecommerce.wsgi:application"]
+CMD python manage.py migrate; gunicorn --config gunicorn_config.py Ecommerce.wsgi:application
