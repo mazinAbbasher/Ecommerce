@@ -169,8 +169,8 @@ ANYMAIL = {
     'MAILGUN_SENDER_DOMAIN': 'sandbox0e396e38238e449fba3ab2b2ee9fec1e.mailgun.org',
 }
 
-CELERY_BROKER_URL = "redis://localhost:6379"
-CELERY_RESULT_BACKEND = "redis://localhost:6379"
+CELERY_BROKER_URL = "redis://redis:6379"
+CELERY_RESULT_BACKEND = "redis://redis:6379"
 
 
 CACHES = {
