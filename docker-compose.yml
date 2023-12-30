@@ -1,25 +1,42 @@
-version: '3.8'
-
+version: '3'
 services:
-  web:
+  mysql:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mazin123
+      MYSQL_DATABASE: ecommerce_database
+    networks:
+      - my-network
+
+  redis:
+    image: redis
+    restart: always
+    networks:
+      - my-network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
+    restart: always
+    environment:
+      - discovery.type=single-node
+    networks:
+      - my-network
+
+  django:
     build:
       context: .
       dockerfile: Dockerfile
+    restart: always
     ports:
-      - 8001:8001
+      - 8000:8000
     depends_on:
+      - mysql
       - redis
       - elasticsearch
-    restart: always
+    networks:
+      - my-network
 
-  redis:
-    image: redis:latest
-    restart: always
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
-    environment:
-      - discovery.type=single-node
-    restart: always
-
+networks:
+  my-network:
 
