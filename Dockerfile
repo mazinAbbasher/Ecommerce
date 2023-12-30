@@ -19,4 +19,4 @@ EXPOSE 8001
 RUN python manage.py collectstatic
 
 # Start the Django development server
-CMD ["gunicorn", "--config", "gunicorn_config.py", "app.wsgi:application"]
+CMD ["gunicorn", "--config", "gunicorn_config.py", "Ecommerce.wsgi:application"]
