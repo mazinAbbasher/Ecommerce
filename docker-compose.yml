@@ -23,7 +23,7 @@ services:
     environment:
       - discovery.type=single-node
    
-  Ecommerce:
+  ecommerce:
     build:
       context: .
       dockerfile: Dockerfile
