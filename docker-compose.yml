@@ -6,23 +6,23 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: mazin123
       MYSQL_DATABASE: ecommerce_database
-    networks:
-      - my-network
+      MYSQL_USER: mazzon
+      MYSQL_PASSWORD: mazzon123
+    volumes:
+      - mysql_data:/var/lib/mysql
+      
 
   redis:
     image: redis
     restart: always
-    networks:
-      - my-network
+
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
     restart: always
     environment:
       - discovery.type=single-node
-    networks:
-      - my-network
-
+   
   django:
     build:
       context: .
@@ -34,9 +34,6 @@ services:
       - mysql
       - redis
       - elasticsearch
-    networks:
-      - my-network
-
-networks:
-  my-network:
+volumes:
+  mysql_data:
 

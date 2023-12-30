@@ -15,7 +15,7 @@ COPY . /code/
 
 # Expose the port that Django runs on
 EXPOSE 8001
-EXPOSE 3306
+# EXPOSE 3306
 
 # RUN python manage.py collectstatic
 
