@@ -5,17 +5,19 @@ FROM python:3.9
 ENV PYTHONUNBUFFERED 1
 
 # Set the working directory inside the container
-WORKDIR /app
-
+WORKDIR /code
 # Install dependencies
-COPY requirements.txt /app/
+COPY requirements.txt /code/
 RUN pip install -r requirements.txt
 RUN pip install mysqlclient
 # Copy the Django project code into the container
-COPY . /app/
+COPY . /code/
 
 # Expose the port that Django runs on
-EXPOSE 8000
+EXPOSE 8001
+
+RUN python manage.py migrate
+RUN python manage.py collectstatic
 
 # Start the Django development server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["gunicorn", "--config", "gunicorn_config.py", "app.wsgi:application"]

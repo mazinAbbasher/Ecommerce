@@ -1,0 +1,10 @@
+django==4.2.1
+djangorestframework==3.14.0
+celery
+django-anymail
+redis
+django-redis
+elasticsearch
+django-elasticsearch-dsl
+django-environ
+gunicorn
