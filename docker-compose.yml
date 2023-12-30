@@ -3,6 +3,7 @@ services:
   db:
     image: mysql
     restart: always
+    container_name: db
     environment:
       MYSQL_ROOT_PASSWORD: mazin123
       MYSQL_DATABASE: ecommerce_database
@@ -15,11 +16,13 @@ services:
   redis:
     image: redis
     restart: always
+    container_name: redis
 
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
     restart: always
+    container_name: elasticsearch
     environment:
       - discovery.type=single-node
    
