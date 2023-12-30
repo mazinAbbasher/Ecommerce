@@ -15,8 +15,9 @@ COPY . /code/
 
 # Expose the port that Django runs on
 EXPOSE 8001
+EXPOSE 3306
 
 RUN python manage.py collectstatic
 
 # Start the Django development server
-CMD ["gunicorn", "--config", "gunicorn_config.py", "Ecommerce.wsgi:application"]
+CMD ["python","manage.py","migrate","gunicorn", "--config", "gunicorn_config.py", "Ecommerce.wsgi:application"]
